@@ -32,6 +32,13 @@
 # file will be overwritten by the next CMake run. The input file was
 # cmake/bazel.rc.in.
 
+build:Debug --compilation_mode=dbg
+build:MinSizeRel --compilation_mode=opt --copt=-Os --host_copt=-Os
+build:Release --compilation_mode=opt
+build:RelWithDebInfo --compilation_mode=opt --copt=-g --host_copt=-g
+
+@BAZEL_CONFIG_ARG@
+
 startup --output_base=@BAZEL_OUTPUT_BASE@
 build --action_env=CC=@CMAKE_C_COMPILER@
 build --action_env=CXX=@CMAKE_CXX_COMPILER@
@@ -43,11 +50,6 @@ build --repo_env=CXX=@CMAKE_CXX_COMPILER@
 build --strip=never
 build --subcommands=@BAZEL_SUBCOMMANDS@
 build --symlink_prefix=/
-
-build:Debug --compilation_mode=dbg
-build:MinSizeRel --compilation_mode=opt --copt=-Os --host_copt=-Os
-build:Release --compilation_mode=opt
-build:RelWithDebInfo --compilation_mode=opt --copt=-g --host_copt=-g
 
 # TODO(jwnimmer-tri) Get these from CMake.
 build --cxxopt=-std=c++17

@@ -104,13 +104,12 @@ set(BAZEL_OUTPUT_BASE
   "${BAZEL_OUTPUT_BASE}/_bazel_$ENV{USER}/${PROJECT_BINARY_DIR_MD5}"
 )
 
-# TODO(jwnimmer-tri) Just dump this into `.bazelrc.in`, not command line!
 if(CMAKE_CONFIGURATION_TYPES OR CMAKE_BUILD_TYPE MATCHES "^(Debug|MinSizeRel|Release|RelWithDebInfo)$")
   set(BAZEL_CONFIG_ARG
     "$<$<CONFIG:Debug>:--config=Debug>$<$<CONFIG:MinSizeRel>:--config=MinSizeRel>$<$<CONFIG:Release>:--config=Release>$<$<CONFIG:RelWithDebInfo>:--config=RelWithDebInfo>"
   )
 else()
-  set(BAZEL_CONFIG_ARG)
+  set(BAZEL_CONFIG_ARG "build --config=Release")
 endif()
 
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
@@ -171,14 +170,12 @@ ExternalProject_Add(drake_custom_cxx
   BUILD_COMMAND
     "${Bazel_EXECUTABLE}"
     build
-    ${BAZEL_CONFIG_ARG}
     //...
   BINARY_DIR "${PROJECT_BINARY_DIR}/wrap"
   BUILD_ALWAYS ON
   INSTALL_COMMAND
     "${Bazel_EXECUTABLE}"
     run
-    ${BAZEL_CONFIG_ARG}
     //:install
     --
     ${BAZEL_INSTALL_TARGET_ARGS}
