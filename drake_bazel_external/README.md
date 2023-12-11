@@ -1,17 +1,38 @@
-# Bazel Project with Drake as an External
+# Bazel project with Drake as an external
 
 This pulls in Drake via the Bazel workspace mechanism.
 
 For an introduction to Bazel, refer to
 [Getting Started with Bazel](https://docs.bazel.build/versions/master/getting-started.html).
 
-## Instructions
+## Assumptions
 
-First, install the required Ubuntu packages:
+You must be using one of Drake's
+[Supported Configurations](https://drake.mit.edu/installation.html#supported-configurations).
+
+You must have already installed
+[Bazelisk](https://github.com/bazelbuild/bazelisk#bazelisk)
+or
+[Bazel](https://bazel.build/install).
+
+The commands given in these instructions assume that your working directory is
+`drake-external-examples/drake_bazel_external`, or the equivalent directory in
+your own copy of this code.
+
+## Setup
+
+By default, this project downloads the master branch of Drake. However, when you
+copy it to for your own use, generally you should configure your copy to use a
+specific version of Drake to ensure a repeatable build. Refer to the comments in
+`WORKSPACE.bazel` for how to do that.
+
+After you've adjusted the Drake version, install the required system packages:
 
 ```
-sudo ../scripts/setup/linux/ubuntu/focal/install_prereqs
+bazel run //:install_prereqs
 ```
+
+## Build
 
 Then, to build and test all apps:
 ```

@@ -4,6 +4,7 @@ Examples of how to use [Drake](https://github.com/RobotLocomotion/drake) in your
 own project:
 
 * [`drake_ament_cmake_installed`](./drake_ament_cmake_installed)
+* [`drake_bazel_download`](./drake_bazel_download)
 * [`drake_bazel_external`](./drake_bazel_external)
 * [`drake_bazel_installed`](./drake_bazel_installed)
 * [`drake_catkin_installed`](./drake_catkin_installed)
@@ -21,6 +22,7 @@ Scripts are provided for various CI instances in `scripts/continuous_integration
 | **Subproject** | **GitHub Actions** | **Jenkins** |
 |:---:|:---:|:---:|
 | `drake_ament_cmake_installed` | o | - |
+| `drake_bazel_download` | o | - |
 | `drake_bazel_external` | - | o |
 | `drake_bazel_installed` | o | o |
 | `drake_catkin_installed` | o | o |

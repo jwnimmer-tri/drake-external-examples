@@ -1,4 +1,17 @@
 # SPDX-License-Identifier: MIT-0
 
-# This is an empty BUILD file, to ensure that this project's root directory is
-# a Bazel package.
+# This provides a command-line tool for users to install Drake's prerequisites.
+sh_binary(
+    name = "install_prereqs",
+    srcs = ["install_prereqs.sh"],
+    data = [
+        "@drake//setup:mac/binary_distribution/Brewfile",
+        "@drake//setup:mac/binary_distribution/requirements.txt",
+        "@drake//setup:mac/source_distribution/Brewfile",
+        "@drake//setup:mac/source_distribution/requirements.txt",
+        "@drake//setup:ubuntu/binary_distribution/packages-focal.txt",
+        "@drake//setup:ubuntu/binary_distribution/packages-jammy.txt",
+        "@drake//setup:ubuntu/source_distribution/packages-focal.txt",
+        "@drake//setup:ubuntu/source_distribution/packages-jammy.txt",
+    ],
+)

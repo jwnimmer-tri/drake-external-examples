@@ -1,0 +1,18 @@
+# SPDX-License-Identifier: MIT-0
+
+workspace(name = "drake_external_examples")
+
+# Change this to refer to the path where you have Drake installed.
+INSTALLED_DRAKE_DIR = "/opt/drake"
+
+new_local_repository(
+    name = "drake_artifacts",
+    path = INSTALLED_DRAKE_DIR,
+    build_file_content = "#",
+)
+
+# Load and run the repository rule that knows how to provide the @drake
+# repository based on a Drake binary release.
+load("@drake_artifacts//:share/drake/repo.bzl", "drake_repository")
+
+drake_repository(name = "drake")
