@@ -1,8 +1,5 @@
 # SPDX-License-Identifier: MIT-0
 
-# TODO(drake#20731) Stop using workspace.
-common --enable_workspace=true
-
 # Default to an optimized build.
 build --compilation_mode=opt
 

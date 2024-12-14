@@ -2,58 +2,41 @@
 
 module(name = "drake_external_examples")
 
-# Add the Bazel rulesets we need.
+# Add the Bazel rules we need.
 bazel_dep(name = "rules_cc", version = "0.0.17")
 bazel_dep(name = "rules_python", version = "0.40.0")
 
 # Use the host system python.
 register_toolchains("@bazel_tools//tools/python:autodetecting_toolchain")
 
-# Disable the exec tools toolchain.
-## XXX register_toolchains("//:python_no_exec_tools_toolchain")
+# Here we introduce Drake as a module dependency, but note that Drake is not
+# published to any Bazel registry. Below, we'll override it with a github
+# source archive.
+bazel_dep(name = "drake")
 
+# By default, this example always uses the latest Drake master branch.
 DRAKE_COMMIT = "master"
 DRAKE_CHECKSUM = ""
 
-# Or choose a specific revision of Drake to use.
+# You can choose a specific revision of Drake to use, e.g.:
 # DRAKE_COMMIT = "be4f658487f739ba04ec079de46f9459b719636d"
 # DRAKE_CHECKSUM = "31ec8f87df3ceb6516de3c33a14c5d59ac5c003b4faf93ac526877d2e150b394"
 #
-# You can also use DRAKE_COMMIT to choose a Drake release; eg:
+# You can also use DRAKE_COMMIT to choose a Drake release; e.g.:
 # DRAKE_COMMIT = "v0.15.0"
+# DRAKE_CHECKSUM = "... XXX ..."
 #
 # Before changing the COMMIT, temporarily uncomment the next line so that Bazel
 # displays the suggested new value for the CHECKSUM.
 # DRAKE_CHECKSUM = "0" * 64
 
-# Or to temporarily build against a local checkout of Drake, at the bash prompt
-# set an environment variable before building:
-#  export EXAMPLES_LOCAL_DRAKE_PATH=/home/user/stuff/drake
-
-# Load an environment variable.
-## XXX load("//:environ.bzl", "environ_repository")
-## XXX environ_repository(name = "environ", vars = ["EXAMPLES_LOCAL_DRAKE_PATH"])
-## XXX load("@environ//:environ.bzl", EXAMPLES_LOCAL_DRAKE_PATH = "EXAMPLES_LOCAL_DRAKE_PATH")
-EXAMPLES_LOCAL_DRAKE_PATH = None  # XXX
-
-# This declares the `@drake` repository as an http_archive from github,
-# iff EXAMPLES_LOCAL_DRAKE_PATH is unset.  When it is set, this declares a
-# `@drake_ignored` package which is never referenced, and thus is ignored.
-http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-http_archive(
-    name = "drake" if not EXAMPLES_LOCAL_DRAKE_PATH else "drake_ignored",
+# This declares the `@drake` repository as a source code archive from github.
+# See README.md for instructions to use a local path, instead.
+archive_override(
+    module_name = "drake",
     urls = [x.format(DRAKE_COMMIT) for x in [
         "https://github.com/RobotLocomotion/drake/archive/{}.tar.gz",
     ]],
     sha256 = DRAKE_CHECKSUM,
     strip_prefix = "drake-{}".format(DRAKE_COMMIT.lstrip("v")),
 )
-
-# This declares the `@drake` repository as a local directory,
-# iff EXAMPLES_LOCAL_DRAKE_PATH is set.  When it is unset, this declares a
-# `@drake_ignored` package which is never referenced, and thus is ignored.
-## XXX local_repository(
-## XXX     name = "drake" if EXAMPLES_LOCAL_DRAKE_PATH else "drake_ignored",
-## XXX     path = EXAMPLES_LOCAL_DRAKE_PATH,
-## XXX )
-print("Using EXAMPLES_LOCAL_DRAKE_PATH={}".format(EXAMPLES_LOCAL_DRAKE_PATH)) if EXAMPLES_LOCAL_DRAKE_PATH else None  # noqa
